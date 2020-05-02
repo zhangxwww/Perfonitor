@@ -104,11 +104,21 @@ namespace Perfonitor
             double xaxis = currentSecond > 10 ? currentSecond - 10
                                               : 0;
             ++currentSecond;
-            plotter.Viewport.Visible = new System.Windows.Rect(xaxis, 0, 10, 100);
+            plotter.Viewport.Visible = new System.Windows.Rect(xaxis, 0, 10, 1);
 
             double usedMB = totalMB - availMB;
             string memoryUsage = string.Format("{0:F1}/{1:F1} GB", usedMB / 1024, totalMB / 1024);
             usageText.Text = memoryUsage;
+        }
+
+        public void ShowLineChart()
+        {
+            plotter.Visibility = Visibility.Visible;
+        }
+
+        public void UnshowLineChart()
+        {
+            plotter.Visibility = Visibility.Collapsed;
         }
     }
 }

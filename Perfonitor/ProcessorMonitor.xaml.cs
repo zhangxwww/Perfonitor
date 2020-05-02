@@ -99,5 +99,15 @@ namespace Perfonitor
             string processorUsage = string.Format("{0:F0}%", percent);
             usageText.Text = processorUsage;
         }
+
+        public void ShowLineChart()
+        {
+            plotter.Visibility = Visibility.Visible;
+        }
+
+        public void UnshowLineChart()
+        {
+            plotter.Visibility = Visibility.Collapsed;
+        }
     }
 }

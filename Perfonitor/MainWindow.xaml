@@ -8,14 +8,24 @@
         mc:Ignorable="d"
         Title="MainWindow" 
         Height="450" 
-        Width="800"
+        Width="185"
+        SizeToContent="Height"
+        WindowStyle="None"
+        AllowsTransparency="True"
+        BorderThickness="1"
+        Background="#01FFFFFF"
+        Topmost="True"
         WindowStartupLocation="CenterScreen">
     <Grid>
         <StackPanel>
-            <local:ProcessorMonitor/>
-            <local:MemoryMonitor/>
-            <local:DiskMonitor/>
-            <local:NetMonitor/>
+            <local:ProcessorMonitor
+                x:Name="processorMonitor"/>
+            <local:MemoryMonitor
+                x:Name="memoryMonitor"/>
+            <local:DiskMonitor
+                x:Name="diskMonitor"/>
+            <local:NetMonitor
+                x:Name="netMonitor"/>
         </StackPanel>
     </Grid>
 </Window>

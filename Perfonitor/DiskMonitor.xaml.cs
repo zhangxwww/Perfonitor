@@ -69,10 +69,27 @@ namespace Perfonitor
         {
             double readB = readCounter.NextValue();
             double writeB = writeCounter.NextValue();
-            string diskWrite = string.Format("{0:F1} MB/s", writeB / 1024 / 1024);
-            string diskRead = string.Format("{0:F1} MB/s", readB / 1024 / 1024);
+            string diskWrite = Format(writeB);
+            string diskRead = Format(readB);
             writeText.Text = diskWrite;
             readText.Text = diskRead;
+        }
+
+        private string Format(double value)
+        {
+            if (value < 1024)
+            {
+                return string.Format("{0:F0} B/s", value);
+            }
+            if (value < 1024 * 1024)
+            {
+                return string.Format("{0:F1} KB/s", value / 1024);
+            }
+            if (value < 1024 * 1024 * 1024)
+            {
+                return string.Format("{0:F1} MB/s", value / 1024 / 1024);
+            }
+            return string.Format("{0:F1} GB/s", value / 1024 / 1024 / 1024);
         }
     }
 }

@@ -12,25 +12,25 @@
         <materialDesign:Card
             Background="#2d90d9"
             Foreground="#d9e1e8"
-            Height="30"
+            Height="auto"
             Width="170"
-            Padding="5 5 5 0"
+            Padding="0 5 5 0"
             Margin="5 5 5 0"
-            UniformCornerRadius="10">
+            UniformCornerRadius="5">
             <StackPanel
                 Margin="0 0 0 5" >
                     <StackPanel
                     Orientation="Horizontal"
                     VerticalAlignment="Center">
                         <TextBlock
-                        FontSize="16"
-                        Margin="5 0 5 0"
-                        Padding="5 0 5 0"
+                        FontSize="14"
+                        Margin="5 2 5 0"
+                        Padding="0 0 5 0"
                         Height="auto"
                         Text="DISK"/>
                     <StackPanel>
                         <StackPanel
-                            Margin="5 0 0 0"
+                            Margin="0 0 0 0"
                             Orientation="Horizontal">
                             <TextBlock
                                 x:Name="writeText"
@@ -38,7 +38,7 @@
                                 Margin="5 -1 5 0"
                                 Padding="5 0 0 0"
                                 Height="auto"
-                                Text="0 MB/s"/>
+                                Text="0 KB/s"/>
                             <materialDesign:PackIcon 
                                 Kind="ArrowBottom"
                                 Width="8"
@@ -46,7 +46,7 @@
                                 Margin="0 1 0 0"/>
                         </StackPanel>
                         <StackPanel
-                            Margin="5 0 0 0"
+                            Margin="0 0 0 0"
                             Orientation="Horizontal">
                             <TextBlock
                                 x:Name="readText"
@@ -54,17 +54,17 @@
                                 Margin="5 0 5 0"
                                 Padding="5 0 0 0"
                                 Height="auto"
-                                Text="0 MB/s"/>
+                                Text="0 KB/s"/>
                             <materialDesign:PackIcon 
                                 Kind="ArrowUp"
                                 Width="8"
                                 Height="8"
-                                Margin="0 3 0 0"/>
+                                Margin="0 2 0 0"/>
                         </StackPanel>
                     </StackPanel>
                         
                     </StackPanel>
-             </StackPanel>
+                           </StackPanel>
         </materialDesign:Card>
     </Grid>
 </UserControl>

@@ -92,15 +92,32 @@ namespace Perfonitor
             {
                 upB += c.NextValue();
             }
-            string uploadMB = string.Format("{0:F1} KB/s", upB / 1024);
-            string downloadMB = string.Format("{0:F1} KB/s", downB / 1024);
-            downloadText.Text = downloadMB;
-            uploadText.Text = uploadMB;
+            string uploadKB = Format(upB);
+            string downloadKB = Format(downB);
+            downloadText.Text = downloadKB;
+            uploadText.Text = uploadKB;
         }
 
         private bool CheckInterfaceName(string name)
         {
             return !name.StartsWith("isatap");
+        }
+
+        private string Format(double value)
+        {
+            if (value < 1024)
+            {
+                return string.Format("{0:F0} B/s", value);
+            }
+            if (value < 1024 * 1024)
+            {
+                return string.Format("{0:F1} KB/s", value / 1024);
+            }
+            if (value < 1024 * 1024 * 1024)
+            {
+                return string.Format("{0:F1} MB/s", value / 1024 / 1024);
+            }
+            return string.Format("{0:F1} GB/s", value / 1024 / 1024 / 1024);
         }
     }
 }

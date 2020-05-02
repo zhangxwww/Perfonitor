@@ -12,24 +12,24 @@
         <materialDesign:Card
             Background="#2d90d9"
             Foreground="#d9e1e8"
-            Height="55"
+            Height="auto"
             Width="170"
-            Padding="5 5 5 0"
+            Padding="0 5 5 0"
             Margin="5 5 5 0"
-            UniformCornerRadius="10">
+            UniformCornerRadius="5">
             <StackPanel
                 Margin="0 0 0 5" >
                 <StackPanel
                     Orientation="Horizontal" >
                     <TextBlock
-                        FontSize="16"
+                        FontSize="14"
                         Margin="5 0 5 0"
-                        Padding="5 0 5 0"
+                        Padding="0 0 5 0"
                         Height="auto"
                         Text="CPU"/>
                     <TextBlock
                         x:Name="usageText"
-                        FontSize="16"
+                        FontSize="14"
                         Margin="5 0 5 0"
                         Padding="5 0 5 0"
                         Height="auto"
