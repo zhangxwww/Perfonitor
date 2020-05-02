@@ -66,11 +66,12 @@ namespace Perfonitor
 
         private void InitPlotter()
         {
-            plotter.AddLineGraph(dataSource, Colors.Green, 1);
+            plotter.AddLineGraph(dataSource, Color.FromRgb(0x28, 0x2c, 0x37), 1);
             plotter.Viewport.FitToView();
             plotter.Children.Remove(plotter.MouseNavigation);
             plotter.Children.Remove(plotter.KeyboardNavigation);
             plotter.Children.Remove(plotter.Legend);
+            plotter.Children.Remove(plotter.DefaultContextMenu);
             plotter.AxisGrid.Remove();
         }
 
