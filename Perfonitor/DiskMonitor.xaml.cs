@@ -22,51 +22,50 @@ namespace Perfonitor
     /// <summary>
     /// ProcessorMonitor.xaml 的交互逻辑
     /// </summary>
-    public partial class ProcessorMonitor : UserControl
+    public partial class DiskMonitor : UserControl
     {
-        private ObservableDataSource<Point> dataSource;
-        private PerformanceCounter performanceCounter;
+        private ObservableDataSource<Point> readDataSource;
+        private ObservableDataSource<Point> writeDataSource;
+        private PerformanceCounter readCounter;
+        private PerformanceCounter writeCounter;
         private DispatcherTimer dispatcherTimer;
         private int currentSecond = TIMESPAN;
 
         private const int TIMESPAN = 10;
 
-        public ProcessorMonitor()
+        public DiskMonitor()
         {
             InitializeComponent();
             InitPerformance();
             InitDataSource();
-            InitPlotter();
             InitTimer();
         }
 
         private void InitPerformance()
         {
-            performanceCounter = new PerformanceCounter()
+            readCounter = new PerformanceCounter()
             {
-                CategoryName = "Processor",
-                CounterName = "% Processor Time",
+                CategoryName = "PhysicalDisk",
+                CounterName = "Disk Read Bytes/sec",
+                InstanceName = "_Total"
+            };
+            writeCounter = new PerformanceCounter()
+            {
+                CategoryName = "PhysicalDisk",
+                CounterName = "Disk Write Bytes/sec",
                 InstanceName = "_Total"
             };
         }
 
         private void InitDataSource()
         {
-            dataSource = new ObservableDataSource<Point>();
+            readDataSource = new ObservableDataSource<Point>();
+            writeDataSource = new ObservableDataSource<Point>();
             for (int _ = 0; _ < TIMESPAN; ++_)
             {
-                dataSource.AppendAsync(base.Dispatcher, new Point(0, 0));
+                readDataSource.AppendAsync(base.Dispatcher, new Point(0, 0));
+                writeDataSource.AppendAsync(base.Dispatcher, new Point(0, 0));
             }
-        }
-
-        private void InitPlotter()
-        {
-            plotter.AddLineGraph(dataSource, Colors.Green, 1);
-            plotter.Viewport.FitToView();
-            plotter.Children.Remove(plotter.MouseNavigation);
-            plotter.Children.Remove(plotter.KeyboardNavigation);
-            plotter.Children.Remove(plotter.Legend);
-            //plotter.AxisGrid.Remove();
         }
 
         private void InitTimer()
@@ -85,19 +84,25 @@ namespace Perfonitor
 
         private void Update()
         {
-            double percent = performanceCounter.NextValue();
-            Point p = new Point()
+            double readB = readCounter.NextValue();
+            double writeB = writeCounter.NextValue();
+            Point r = new Point()
             {
                 X = currentSecond,
-                Y = percent
+                Y = readB
             };
-            dataSource.AppendAsync(base.Dispatcher, p);
-            double xaxis = currentSecond > 10 ? currentSecond - 10
-                                              : 0;
+            Point w = new Point()
+            {
+                X = currentSecond,
+                Y = writeB
+            };
+            readDataSource.AppendAsync(base.Dispatcher, r);
+            writeDataSource.AppendAsync(base.Dispatcher, w);
             ++currentSecond;
-            plotter.Viewport.Visible = new System.Windows.Rect(xaxis, 0, 10, 100);
-            string processorUsage = string.Format("{0:F0}%", percent);
-            usageText.Text = processorUsage;
+            string diskWrite = string.Format("{0:F1} MB/s", writeB / 1024 / 1024);
+            string diskRead = string.Format("{0:F1} MB/s", readB / 1024 / 1024);
+            writeText.Text = diskWrite;
+            readText.Text = diskRead;
         }
     }
 }

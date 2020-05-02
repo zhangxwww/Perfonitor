@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -21,15 +22,33 @@ namespace Perfonitor
     /// </summary>
     public partial class MainWindow : Window
     {
+        /*
+        [DllImport("kernel32.dll")]
+        [return: MarshalAs(UnmanagedType.Bool)]
+        static extern bool GetPhysicallyInstalledSystemMemory(out long totalMemoryKilobytes);
+        */
+
         public MainWindow()
         {
             InitializeComponent();
 
-            //Test();
+            Test();
         }
 
         private void Test()
         {
+            /*
+            GetPhysicallyInstalledSystemMemory(out long memKb);
+            Debug.Print((memKb / 1024 / 1024).ToString());
+
+            PerformanceCounter pc = new PerformanceCounter()
+            {
+                CategoryName = "Memory",
+                CounterName = "Available MBytes"
+            };
+            Debug.Print(pc.NextValue().ToString());
+            */
+            /*
             string[] interestedItem = new string[]
             {
                 //"Processor",
@@ -58,9 +77,7 @@ namespace Perfonitor
                         }
                     }
                 }
-                /*
                 */
-            }
         }
     }
 }

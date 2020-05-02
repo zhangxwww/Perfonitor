@@ -11,6 +11,10 @@
         Width="800"
         WindowStartupLocation="CenterScreen">
     <Grid>
-        <local:ProcessorMonitor/>
+        <StackPanel>
+            <local:ProcessorMonitor/>
+            <local:MemoryMonitor/>
+            <local:DiskMonitor/>
+        </StackPanel>
     </Grid>
 </Window>

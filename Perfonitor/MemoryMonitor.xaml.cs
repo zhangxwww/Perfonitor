@@ -1,5 +1,6 @@
 ﻿using Microsoft.Research.DynamicDataDisplay;
 using Microsoft.Research.DynamicDataDisplay.DataSources;
+using System.Runtime.InteropServices;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -22,8 +23,13 @@ namespace Perfonitor
     /// <summary>
     /// ProcessorMonitor.xaml 的交互逻辑
     /// </summary>
-    public partial class ProcessorMonitor : UserControl
+    public partial class MemoryMonitor : UserControl
     {
+
+        [DllImport("kernel32.dll")]
+        [return: MarshalAs(UnmanagedType.Bool)]
+        static extern bool GetPhysicallyInstalledSystemMemory(out long totalMemoryKilobytes);
+
         private ObservableDataSource<Point> dataSource;
         private PerformanceCounter performanceCounter;
         private DispatcherTimer dispatcherTimer;
@@ -31,7 +37,7 @@ namespace Perfonitor
 
         private const int TIMESPAN = 10;
 
-        public ProcessorMonitor()
+        public MemoryMonitor()
         {
             InitializeComponent();
             InitPerformance();
@@ -44,9 +50,8 @@ namespace Perfonitor
         {
             performanceCounter = new PerformanceCounter()
             {
-                CategoryName = "Processor",
-                CounterName = "% Processor Time",
-                InstanceName = "_Total"
+                CategoryName = "Memory",
+                CounterName = "Available MBytes",
             };
         }
 
@@ -66,7 +71,7 @@ namespace Perfonitor
             plotter.Children.Remove(plotter.MouseNavigation);
             plotter.Children.Remove(plotter.KeyboardNavigation);
             plotter.Children.Remove(plotter.Legend);
-            //plotter.AxisGrid.Remove();
+            plotter.AxisGrid.Remove();
         }
 
         private void InitTimer()
@@ -85,19 +90,25 @@ namespace Perfonitor
 
         private void Update()
         {
-            double percent = performanceCounter.NextValue();
+            GetPhysicallyInstalledSystemMemory(out long memKB);
+            double totalMB = memKB / 1024.0;
+            Debug.Print("total MB:" + totalMB.ToString());
+            double availMB = performanceCounter.NextValue();
             Point p = new Point()
             {
                 X = currentSecond,
-                Y = percent
+                Y = 1 - availMB / totalMB
             };
+            Debug.Print("Percent: " + (1 - availMB / totalMB).ToString());
             dataSource.AppendAsync(base.Dispatcher, p);
             double xaxis = currentSecond > 10 ? currentSecond - 10
                                               : 0;
             ++currentSecond;
             plotter.Viewport.Visible = new System.Windows.Rect(xaxis, 0, 10, 100);
-            string processorUsage = string.Format("{0:F0}%", percent);
-            usageText.Text = processorUsage;
+
+            double usedMB = totalMB - availMB;
+            string memoryUsage = string.Format("{0:F1}/{1:F1} GB", usedMB / 1024, totalMB / 1024);
+            usageText.Text = memoryUsage;
         }
     }
 }
