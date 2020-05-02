@@ -92,6 +92,10 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
+    <Page Include="NetMonitor.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="ProcessorMonitor.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -100,6 +104,9 @@
   <ItemGroup>
     <Compile Include="MemoryMonitor.xaml.cs">
       <DependentUpon>MemoryMonitor.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="NetMonitor.xaml.cs">
+      <DependentUpon>NetMonitor.xaml</DependentUpon>
     </Compile>
     <Compile Include="ProcessorMonitor.xaml.cs">
       <DependentUpon>ProcessorMonitor.xaml</DependentUpon>

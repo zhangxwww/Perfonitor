@@ -15,6 +15,7 @@
             <local:ProcessorMonitor/>
             <local:MemoryMonitor/>
             <local:DiskMonitor/>
+            <local:NetMonitor/>
         </StackPanel>
     </Grid>
 </Window>

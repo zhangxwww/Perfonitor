@@ -37,25 +37,9 @@ namespace Perfonitor
 
         private void Test()
         {
-            /*
-            GetPhysicallyInstalledSystemMemory(out long memKb);
-            Debug.Print((memKb / 1024 / 1024).ToString());
-
-            PerformanceCounter pc = new PerformanceCounter()
-            {
-                CategoryName = "Memory",
-                CounterName = "Available MBytes"
-            };
-            Debug.Print(pc.NextValue().ToString());
-            */
-            /*
             string[] interestedItem = new string[]
             {
-                //"Processor",
-                "Network Interface"
-                //"PhysicalDisk",
-                //"Memory",
-                //"FileSystem Disk Activity"
+                "PhysicalDisk"
             };
             PerformanceCounterCategory[] pcc = PerformanceCounterCategory.GetCategories();
             foreach (PerformanceCounterCategory p in pcc)
@@ -77,7 +61,7 @@ namespace Perfonitor
                         }
                     }
                 }
-                */
+            }
         }
     }
 }

@@ -66,7 +66,7 @@ namespace Perfonitor
             plotter.Children.Remove(plotter.MouseNavigation);
             plotter.Children.Remove(plotter.KeyboardNavigation);
             plotter.Children.Remove(plotter.Legend);
-            //plotter.AxisGrid.Remove();
+            plotter.AxisGrid.Remove();
         }
 
         private void InitTimer()

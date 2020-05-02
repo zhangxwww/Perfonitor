@@ -24,20 +24,14 @@ namespace Perfonitor
     /// </summary>
     public partial class DiskMonitor : UserControl
     {
-        private ObservableDataSource<Point> readDataSource;
-        private ObservableDataSource<Point> writeDataSource;
         private PerformanceCounter readCounter;
         private PerformanceCounter writeCounter;
         private DispatcherTimer dispatcherTimer;
-        private int currentSecond = TIMESPAN;
-
-        private const int TIMESPAN = 10;
 
         public DiskMonitor()
         {
             InitializeComponent();
             InitPerformance();
-            InitDataSource();
             InitTimer();
         }
 
@@ -55,17 +49,6 @@ namespace Perfonitor
                 CounterName = "Disk Write Bytes/sec",
                 InstanceName = "_Total"
             };
-        }
-
-        private void InitDataSource()
-        {
-            readDataSource = new ObservableDataSource<Point>();
-            writeDataSource = new ObservableDataSource<Point>();
-            for (int _ = 0; _ < TIMESPAN; ++_)
-            {
-                readDataSource.AppendAsync(base.Dispatcher, new Point(0, 0));
-                writeDataSource.AppendAsync(base.Dispatcher, new Point(0, 0));
-            }
         }
 
         private void InitTimer()
@@ -86,19 +69,6 @@ namespace Perfonitor
         {
             double readB = readCounter.NextValue();
             double writeB = writeCounter.NextValue();
-            Point r = new Point()
-            {
-                X = currentSecond,
-                Y = readB
-            };
-            Point w = new Point()
-            {
-                X = currentSecond,
-                Y = writeB
-            };
-            readDataSource.AppendAsync(base.Dispatcher, r);
-            writeDataSource.AppendAsync(base.Dispatcher, w);
-            ++currentSecond;
             string diskWrite = string.Format("{0:F1} MB/s", writeB / 1024 / 1024);
             string diskRead = string.Format("{0:F1} MB/s", readB / 1024 / 1024);
             writeText.Text = diskWrite;
