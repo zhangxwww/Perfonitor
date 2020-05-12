@@ -26,7 +26,6 @@ namespace Perfonitor
     {
         private ObservableDataSource<Point> dataSource;
         private PerformanceCounter performanceCounter;
-        private DispatcherTimer dispatcherTimer;
         private int currentSecond = TIMESPAN;
 
         private const int TIMESPAN = 10;
@@ -37,7 +36,6 @@ namespace Perfonitor
             InitPerformance();
             InitDataSource();
             InitPlotter();
-            InitTimer();
         }
 
         private void InitPerformance()
@@ -70,33 +68,23 @@ namespace Perfonitor
             plotter.AxisGrid.Remove();
         }
 
-        private void InitTimer()
-        {
-            dispatcherTimer = new DispatcherTimer()
-            {
-                Interval = TimeSpan.FromSeconds(1),
-                IsEnabled = true
-            };
-            dispatcherTimer.Tick += new EventHandler((sender, e) =>
-            {
-                Update();
-            });
-            dispatcherTimer.Start();
-        }
-
-        private void Update()
+      
+        public void Update()
         {
             double percent = performanceCounter.NextValue();
-            Point p = new Point()
+            if (plotter.Visibility == Visibility.Visible)
             {
-                X = currentSecond,
-                Y = percent
-            };
-            dataSource.AppendAsync(base.Dispatcher, p);
-            double xaxis = currentSecond > 10 ? currentSecond - 10
+                Point p = new Point()
+                {
+                    X = currentSecond,
+                    Y = percent
+                };
+                dataSource.AppendAsync(base.Dispatcher, p);
+                double xaxis = currentSecond > 10 ? currentSecond - 10
                                               : 0;
-            ++currentSecond;
-            plotter.Viewport.Visible = new System.Windows.Rect(xaxis, 0, 10, 100);
+                ++currentSecond;
+                plotter.Viewport.Visible = new System.Windows.Rect(xaxis, 0, 10, 100);
+            }
             string processorUsage = string.Format("{0:F0}%", percent);
             usageText.Text = processorUsage;
         }

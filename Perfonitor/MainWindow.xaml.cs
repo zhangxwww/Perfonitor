@@ -16,6 +16,7 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.Drawing;
 using System.Windows.Forms;
+using System.Windows.Threading;
 
 namespace Perfonitor
 {
@@ -26,6 +27,8 @@ namespace Perfonitor
     {
 
         private NotifyIcon notifyIcon;
+        private DispatcherTimer timer;
+        private System.Windows.Forms.MenuItem cpu, ram, disk, net;
 
         public MainWindow()
         {
@@ -37,16 +40,17 @@ namespace Perfonitor
             });
 
             InitNotifyIcon();
+            InitTimer();
         }
 
         private void InitNotifyIcon()
         {
             ShowInTaskbar = false;
 
-            System.Windows.Forms.MenuItem cpu = new System.Windows.Forms.MenuItem("CPU") { Checked = true };
-            System.Windows.Forms.MenuItem ram = new System.Windows.Forms.MenuItem("RAM") { Checked = true };
-            System.Windows.Forms.MenuItem disk = new System.Windows.Forms.MenuItem("Disk") { Checked = true };
-            System.Windows.Forms.MenuItem net = new System.Windows.Forms.MenuItem("Ethernet") { Checked = true };
+            cpu = new System.Windows.Forms.MenuItem("CPU") { Checked = true };
+            ram = new System.Windows.Forms.MenuItem("RAM") { Checked = true };
+            disk = new System.Windows.Forms.MenuItem("Disk") { Checked = true };
+            net = new System.Windows.Forms.MenuItem("Ethernet") { Checked = true };
             System.Windows.Forms.MenuItem linechart = new System.Windows.Forms.MenuItem("Show Line Chart") { Checked = true };
             System.Windows.Forms.MenuItem show = new System.Windows.Forms.MenuItem("Show") { Checked = true, Enabled = false };
             System.Windows.Forms.MenuItem hide = new System.Windows.Forms.MenuItem("Hide");
@@ -149,6 +153,40 @@ namespace Perfonitor
                     ShowWindow(show, hide);
                 }
             });
+        }
+
+        private void InitTimer()
+        {
+            timer = new DispatcherTimer()
+            {
+                Interval = TimeSpan.FromSeconds(1),
+                IsEnabled = true
+            };
+            timer.Tick += new EventHandler((sender, e) =>
+            {
+                Update();
+            });
+            timer.Start();
+        }
+
+        private void Update()
+        {
+            if (cpu.Checked)
+            {
+                processorMonitor.Update();
+            }
+            if (ram.Checked)
+            {
+                memoryMonitor.Update();
+            }
+            if (disk.Checked)
+            {
+                diskMonitor.Update();
+            }
+            if (net.Checked)
+            {
+                netMonitor.Update();
+            }
         }
 
         private void ShowLineChart()

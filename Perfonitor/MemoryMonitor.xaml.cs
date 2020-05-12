@@ -32,7 +32,6 @@ namespace Perfonitor
 
         private ObservableDataSource<Point> dataSource;
         private PerformanceCounter performanceCounter;
-        private DispatcherTimer dispatcherTimer;
         private int currentSecond = TIMESPAN;
 
         private const int TIMESPAN = 10;
@@ -43,7 +42,6 @@ namespace Perfonitor
             InitPerformance();
             InitDataSource();
             InitPlotter();
-            InitTimer();
         }
 
         private void InitPerformance()
@@ -75,38 +73,25 @@ namespace Perfonitor
             plotter.AxisGrid.Remove();
         }
 
-        private void InitTimer()
-        {
-            dispatcherTimer = new DispatcherTimer()
-            {
-                Interval = TimeSpan.FromSeconds(1),
-                IsEnabled = true
-            };
-            dispatcherTimer.Tick += new EventHandler((sender, e) =>
-            {
-                Update();
-            });
-            dispatcherTimer.Start();
-        }
-
-        private void Update()
+        public void Update()
         {
             GetPhysicallyInstalledSystemMemory(out long memKB);
             double totalMB = memKB / 1024.0;
-            Debug.Print("total MB:" + totalMB.ToString());
             double availMB = performanceCounter.NextValue();
-            Point p = new Point()
-            {
-                X = currentSecond,
-                Y = 1 - availMB / totalMB
-            };
-            Debug.Print("Percent: " + (1 - availMB / totalMB).ToString());
-            dataSource.AppendAsync(base.Dispatcher, p);
-            double xaxis = currentSecond > 10 ? currentSecond - 10
-                                              : 0;
-            ++currentSecond;
-            plotter.Viewport.Visible = new System.Windows.Rect(xaxis, 0, 10, 1);
 
+            if (plotter.Visibility == Visibility.Visible)
+            {
+                Point p = new Point()
+                {
+                    X = currentSecond,
+                    Y = 1 - availMB / totalMB
+                };
+                dataSource.AppendAsync(base.Dispatcher, p);
+                double xaxis = currentSecond > 10 ? currentSecond - 10
+                                              : 0;
+                ++currentSecond;
+                plotter.Viewport.Visible = new System.Windows.Rect(xaxis, 0, 10, 1);
+            }
             double usedMB = totalMB - availMB;
             string memoryUsage = string.Format("{0:F1}/{1:F1} GB", usedMB / 1024, totalMB / 1024);
             usageText.Text = memoryUsage;

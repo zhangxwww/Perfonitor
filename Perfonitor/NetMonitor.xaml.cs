@@ -26,13 +26,11 @@ namespace Perfonitor
     {
         private List<PerformanceCounter> downloadCounters;
         private List<PerformanceCounter> uploadCounters;
-        private DispatcherTimer dispatcherTimer;
 
         public NetMonitor()
         {
             InitializeComponent();
             InitPerformance();
-            InitTimer();
         }
 
         private void InitPerformance()
@@ -66,21 +64,7 @@ namespace Perfonitor
             }
         }
 
-        private void InitTimer()
-        {
-            dispatcherTimer = new DispatcherTimer()
-            {
-                Interval = TimeSpan.FromSeconds(1),
-                IsEnabled = true
-            };
-            dispatcherTimer.Tick += new EventHandler((sender, e) =>
-            {
-                Update();
-            });
-            dispatcherTimer.Start();
-        }
-
-        private void Update()
+        public void Update()
         {
             double downB = 0;
             foreach (var c in downloadCounters)

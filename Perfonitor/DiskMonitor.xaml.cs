@@ -26,13 +26,11 @@ namespace Perfonitor
     {
         private PerformanceCounter readCounter;
         private PerformanceCounter writeCounter;
-        private DispatcherTimer dispatcherTimer;
 
         public DiskMonitor()
         {
             InitializeComponent();
             InitPerformance();
-            InitTimer();
         }
 
         private void InitPerformance()
@@ -51,21 +49,7 @@ namespace Perfonitor
             };
         }
 
-        private void InitTimer()
-        {
-            dispatcherTimer = new DispatcherTimer()
-            {
-                Interval = TimeSpan.FromSeconds(1),
-                IsEnabled = true
-            };
-            dispatcherTimer.Tick += new EventHandler((sender, e) =>
-            {
-                Update();
-            });
-            dispatcherTimer.Start();
-        }
-
-        private void Update()
+        public void Update()
         {
             double readB = readCounter.NextValue();
             double writeB = writeCounter.NextValue();
